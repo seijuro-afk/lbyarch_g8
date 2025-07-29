@@ -1,0 +1,2 @@
+^C:\USERS\SREGI\DOCUMENTS\LBYARCH\C AND ASM\TEST\TEST\ASMFUNC.ASM
+c:\nasm\nasm -fwin64 asmfunc.asm
