@@ -39,7 +39,7 @@ At execution, program benchmarks the kernel for vector sizes:
 - 2^{26} = 67,108,864
   
 And prints:
-- The average execution time over 30 runs
+- The average execution time over 30 runs of both kernels
 - The first 10 values of the resulting vector Z
 
 ### Comparative Analysis
@@ -51,16 +51,30 @@ Benchmarking was done across vector sizes:
 Each kernel version was executed 30 times per size, using QueryPerformanceCounter to measure runtime precisely.
 #### Results:
 Vector size: 2^20 = 1048576
-Average Execution Time (30 runs): 1.1080 ms
-<img width="534" height="321" alt="image" src="https://github.com/user-attachments/assets/3ce4caf3-c737-45cc-b8be-ef542812201f" />
+Assembly Kernel Average Time (30 runs): 1.1697 ms
+C Kernel Average Time        (30 runs): 1.3477 ms
+
+<img width="567" height="348" alt="image" src="https://github.com/user-attachments/assets/77b3c6ce-21e3-4095-b73c-43a5cb1f9994" />
+
+<img width="359" height="255" alt="image" src="https://github.com/user-attachments/assets/2313a547-d6ec-4a26-a90d-cf57b45049f8" />
+
 
 Vector size: 2^24 = 16777216
-Average Execution Time (30 runs): 33.6040 ms
-<img width="541" height="312" alt="image" src="https://github.com/user-attachments/assets/497bf6ba-a655-4085-8650-8e4abdc71658" />
+Assembly Kernel Average Time (30 runs): 37.0390 ms
+C Kernel Average Time        (30 runs): 35.0534 ms
+
+<img width="494" height="329" alt="image" src="https://github.com/user-attachments/assets/aaed68a0-df33-49f5-96ef-352f19eb15c1" />
+
+<img width="469" height="253" alt="image" src="https://github.com/user-attachments/assets/047400ee-d829-4eb9-8b28-9bf7eed19cce" />
 
 Vector size: 2^26 = 67108864
-Average Execution Time (30 runs): 111.8667 ms
-<img width="517" height="317" alt="image" src="https://github.com/user-attachments/assets/ece736dd-74ff-4472-be90-63619495e716" />
+Assembly Kernel Average Time (30 runs): 107.6310 ms
+C Kernel Average Time        (30 runs): 136.6501 ms
+
+<img width="587" height="347" alt="image" src="https://github.com/user-attachments/assets/429df714-30b0-4f82-a4c0-d314f631d710" />
+
+<img width="459" height="249" alt="image" src="https://github.com/user-attachments/assets/0eb094b9-fecd-489c-9e80-c8606ede358e" />
+
 
 ### Correctness Check:
 To verify if the program is outputing the right values, sanity.c is created to check whether the expected values match the returned value of the assembly.
