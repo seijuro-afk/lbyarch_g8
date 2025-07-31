@@ -4,10 +4,17 @@
 #include <time.h>
 #include <math.h>
 
-// Declare external assembly kernel
+// Assembly kernel declaration
 extern void asmhello(float* Z, int n, float A, float* X, float* Y);
 
-// Random float generator between 0 and 1
+// C version of the kernel
+void c_kernel(float* Z, int n, float A, float* X, float* Y) {
+    for (int i = 0; i < n; i++) {
+        Z[i] = A * X[i] + Y[i];
+    }
+}
+
+// Random float generator
 float rand_float() {
     return (float)rand() / RAND_MAX;
 }
@@ -15,56 +22,69 @@ float rand_float() {
 int main() {
     srand((unsigned int)time(NULL));  // Seed RNG
 
-    // Desired sizes: 2^20, 2^24, 2^28 (or adjust as needed)
-    int sizes[] = {1 << 20, 1 << 24, 1 << 26};
+    int sizes[] = {1 << 20, 1 << 24, 1 << 26};  // 1M, 16M, 64M
     int num_sizes = sizeof(sizes) / sizeof(sizes[0]);
-    float A = 1.5f;  // Sample scalar value
+    float A = 1.5f;
 
     for (int s = 0; s < num_sizes; s++) {
         int n = sizes[s];
-        printf("\n=== Benchmarking Assembly Kernel ===\n");
+        printf("\n=== Benchmarking Kernels ===\n");
         printf("Vector size: 2^%d = %d\n", (int)(log(n)/log(2)), n);
 
         // Allocate memory
         float* X = (float*)malloc(n * sizeof(float));
         float* Y = (float*)malloc(n * sizeof(float));
-        float* Z = (float*)malloc(n * sizeof(float));
-        if (!X || !Y || !Z) {
-            printf("Memory allocation failed for size %d\n", n);
-            free(X); free(Y); free(Z);
+        float* Z_asm = (float*)malloc(n * sizeof(float));
+        float* Z_c = (float*)malloc(n * sizeof(float));
+        if (!X || !Y || !Z_asm || !Z_c) {
+            printf("Memory allocation failed\n");
+            free(X); free(Y); free(Z_asm); free(Z_c);
             continue;
         }
 
-        // Initialize X and Y with random floats
+        // Initialize input arrays
         for (int i = 0; i < n; i++) {
             X[i] = rand_float();
             Y[i] = rand_float();
         }
 
-        // Timing loop
         LARGE_INTEGER freq, start, end;
         QueryPerformanceFrequency(&freq);
-        double total_time = 0.0;
 
+        // Time assembly kernel
+        double asm_time = 0.0;
         for (int run = 0; run < 30; run++) {
             QueryPerformanceCounter(&start);
-            asmhello(Z, n, A, X, Y);
+            asmhello(Z_asm, n, A, X, Y);
             QueryPerformanceCounter(&end);
-            double elapsed = (double)(end.QuadPart - start.QuadPart) * 1000.0 / freq.QuadPart;
-            total_time += elapsed;
+            asm_time += (double)(end.QuadPart - start.QuadPart) * 1000.0 / freq.QuadPart;
         }
 
-        // Print average execution time
-        double avg_time = total_time / 30.0;
-        printf("Average Execution Time (30 runs): %.4f ms\n", avg_time);
+        // Time C kernel
+        double c_time = 0.0;
+        for (int run = 0; run < 30; run++) {
+            QueryPerformanceCounter(&start);
+            c_kernel(Z_c, n, A, X, Y);
+            QueryPerformanceCounter(&end);
+            c_time += (double)(end.QuadPart - start.QuadPart) * 1000.0 / freq.QuadPart;
+        }
 
-        // Show first 10 elements of Z
-        printf("First 10 results of Z:\n");
+        // Print results
+        printf("Assembly Kernel Average Time (30 runs): %.4f ms\n", asm_time / 30.0);
+        printf("C Kernel Average Time        (30 runs): %.4f ms\n", c_time / 30.0);
+
+        // First 10 elements for quick check
+        printf("First 10 results from Assembly:\n");
         for (int i = 0; i < 10 && i < n; i++) {
-            printf("Z[%d] = %.4f\n", i, Z[i]);
+            printf("Z_asm[%d] = %.4f\n", i, Z_asm[i]);
         }
 
-        free(X); free(Y); free(Z);
+        printf("First 10 results from C:\n");
+        for (int i = 0; i < 10 && i < n; i++) {
+            printf("Z_c[%d] = %.4f\n", i, Z_c[i]);
+        }
+
+        free(X); free(Y); free(Z_asm); free(Z_c);
     }
 
     return 0;
