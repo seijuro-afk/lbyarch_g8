@@ -42,5 +42,35 @@ And prints:
 - The average execution time over 30 runs
 - The first 10 values of the resulting vector Z
 
+### Comparative Analysis
+Benchmarking was done across vector sizes:
+- 2^{20} = 1,048,576 elements
+- 2^{24} = 16,777,216 elements
+- 2^{26} = 67,108,864 elements
+
+Each kernel version was executed 30 times per size, using QueryPerformanceCounter to measure runtime precisely.
+#### Results:
+Vector size: 2^20 = 1048576
+Average Execution Time (30 runs): 1.1080 ms
+<img width="534" height="321" alt="image" src="https://github.com/user-attachments/assets/3ce4caf3-c737-45cc-b8be-ef542812201f" />
+
+Vector size: 2^24 = 16777216
+Average Execution Time (30 runs): 33.6040 ms
+<img width="541" height="312" alt="image" src="https://github.com/user-attachments/assets/497bf6ba-a655-4085-8650-8e4abdc71658" />
+
+Vector size: 2^26 = 67108864
+Average Execution Time (30 runs): 111.8667 ms
+<img width="517" height="317" alt="image" src="https://github.com/user-attachments/assets/ece736dd-74ff-4472-be90-63619495e716" />
+
+### Correctness Check:
+To verify if the program is outputing the right values, sanity.c is created to check whether the expected values match the returned value of the assembly.
+
+Code:
+C:\nasm\nasm.exe -f win64 funcasm.asm -o funcasm.obj
+gcc sanity.c funcasm.obj -o sanity.exe
+sanity.exe
+
+Output:
+<img width="621" height="274" alt="image" src="https://github.com/user-attachments/assets/c91e48f4-d4e3-4c19-99a1-50b0568b0bd1" />
 
 
