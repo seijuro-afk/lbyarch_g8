@@ -21,6 +21,8 @@ Output: store result in vector Z.  Display the result of 1st ten elements of vec
 ### Files
 - main.c - C program that benchmarks the assembly kernel
 - funcasm.asm - x86-64 assembly implementation of the kernel logic
+- sanity.c - C program to check if assembly subroutine is correct (aka sanity check)
+- Vid_DEMO.mp4 - contains the demo video of the whole MP
 
 ### Requirements
 - Windows OS
