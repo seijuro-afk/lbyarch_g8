@@ -80,7 +80,7 @@ Each kernel version was executed 30 times per size, using QueryPerformanceCounte
 ### Analysis and Interpretation
 
 - Small Size (2²⁰): Assembly outperforms C slightly. This is consistent with lower-level optimization benefits like tighter loops and reduced overhead.
-- Medium Size (2²⁴): Surprisingly, the C kernel edges ahead. This may point to cache alignment or loop unrolling decisions made by the compiler — or even memory bandwidth saturation that favors C’s predictable pattern.
+- Medium Size (2²⁴): Surprisingly, the C kernel edges ahead. This may point to cache alignment or loop unrolling decisions made by the compiler.
 - Large Size (2²⁶): Assembly clearly pulls ahead with a ~27% speedup. This is where custom ASM implementations shine: bypassing some of C’s abstractions and tapping directly into CPU registers.
 
 
