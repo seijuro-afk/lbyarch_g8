@@ -66,11 +66,13 @@ Average Execution Time (30 runs): 111.8667 ms
 To verify if the program is outputing the right values, sanity.c is created to check whether the expected values match the returned value of the assembly.
 
 Code:
-C:\nasm\nasm.exe -f win64 funcasm.asm -o funcasm.obj
-gcc sanity.c funcasm.obj -o sanity.exe
-sanity.exe
+- C:\nasm\nasm.exe -f win64 funcasm.asm -o funcasm.obj
+- gcc sanity.c funcasm.obj -o sanity.exe
+- sanity.exe
 
 Output:
+
+
 <img width="621" height="274" alt="image" src="https://github.com/user-attachments/assets/c91e48f4-d4e3-4c19-99a1-50b0568b0bd1" />
 
 
